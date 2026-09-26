@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LE-System Hausaufgaben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --surface: #ffffff;
+    --surface-2: #eef0f6;
+    --border: rgba(20,24,38,0.10);
+    --text: #14182a;
+    --text-dim: #5c6478;
+    --accent: #3E74F0;
+    --accent-dark: #2c56c2;
+    --accent-tint: rgba(62,116,240,0.12);
+    --orange: #C97A1E;
+    --orange-tint: rgba(201,122,30,0.14);
+    --green: #2E8B4F;
+    --green-tint: rgba(46,139,79,0.14);
+    --red: #C23B32;
+    --red-tint: rgba(194,59,50,0.13);
+    --shadow: 0 1px 2px rgba(20,24,38,0.06), 0 8px 24px rgba(20,24,38,0.06);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c1120;
+      --surface: #141a2c;
+      --surface-2: #1b2338;
+      --border: rgba(255,255,255,0.09);
+      --text: #eef1f8;
+      --text-dim: #93a0bd;
+      --accent: #5a8bff;
+      --accent-dark: #3E74F0;
+      --accent-tint: rgba(90,139,255,0.16);
+      --orange: #e0a23e;
+      --orange-tint: rgba(224,162,62,0.16);
+      --green: #4caf6d;
+      --green-tint: rgba(76,175,109,0.16);
+      --red: #e0524a;
+      --red-tint: rgba(224,82,74,0.16);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c1120;
+    --surface: #141a2c;
+    --surface-2: #1b2338;
+    --border: rgba(255,255,255,0.09);
+    --text: #eef1f8;
+    --text-dim: #93a0bd;
+    --accent: #5a8bff;
+    --accent-dark: #3E74F0;
+    --accent-tint: rgba(90,139,255,0.16);
+    --orange: #e0a23e;
+    --orange-tint: rgba(224,162,62,0.16);
+    --green: #4caf6d;
+    --green-tint: rgba(76,175,109,0.16);
+    --red: #e0524a;
+    --red-tint: rgba(224,82,74,0.16);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .brand { font-family: "Sora", "Source Sans 3", sans-serif; text-wrap: balance; }
+  #app {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 24px 20px calc(48px + env(safe-area-inset-bottom, 0px));
+    min-height: 100%;
+  }
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    margin: -24px -20px 24px;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 10;
+  }
+  .brand { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+  .topbar-meta { font-size: 12.5px; color: var(--text-dim); text-align: right; }
+  .topbar-meta button {
+    background: none; border: none; color: var(--accent); font: inherit; font-weight: 600;
+    cursor: pointer; padding: 0; font-size: 12.5px;
+  }
+
+  h1 { font-size: 26px; font-weight: 700; margin: 4px 0 6px; letter-spacing: -0.01em; }
+  h2 { font-size: 19px; font-weight: 600; margin: 0 0 4px; }
+  .subtitle { color: var(--text-dim); font-size: 14.5px; margin: 0 0 24px; }
+
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .row { display: flex; gap: 12px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card + .card { margin-top: 12px; }
+
+  .role-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+  }
+  .role-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .role-card .icon {
+    width: 44px; height: 44px; border-radius: 12px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-tint); color: var(--accent-dark); font-size: 20px;
+  }
+  .role-card .icon.orange { background: var(--orange-tint); color: var(--orange); }
+  .role-card h3 { margin: 0 0 2px; font-size: 16px; font-weight: 600; }
+  .role-card p { margin: 0; font-size: 13.5px; color: var(--text-dim); }
+
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--text-dim); margin: 0 0 6px; }
+  input[type=text], input[type=date], textarea, select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 12px;
+    font: inherit;
+    color: var(--text);
+    font-size: 15px;
+  }
+  input[type=text]:focus, input[type=date]:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  .field { margin-bottom: 14px; }
+  .code-input {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  button.btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 12px 18px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary { background: var(--accent); color: white; width: 100%; }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border); width: 100%; }
+  .btn-ghost { background: none; color: var(--accent); padding: 8px 4px; }
+  .btn-danger { background: none; color: var(--red); padding: 6px 10px; font-size: 13px; }
+  button.btn:disabled { opacity: 0.55; cursor: default; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+  }
+  .pill-orange { background: var(--orange-tint); color: var(--orange); }
+  .pill-green { background: var(--green-tint); color: var(--green); }
+  .pill-red { background: var(--red-tint); color: var(--red); }
+  .pill-dim { background: var(--surface-2); color: var(--text-dim); }
+
+  .hw-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 0; border-top: 1px solid var(--border);
+  }
+  .hw-item:first-child { border-top: none; padding-top: 2px; }
+  .hw-title { font-weight: 600; font-size: 15px; margin: 0 0 3px; }
+  .hw-meta { font-size: 12.5px; color: var(--text-dim); }
+
+  .class-code-display {
+    text-align: center;
+    padding: 22px 16px;
+    background: var(--accent-tint);
+    border-radius: 14px;
+    margin-bottom: 18px;
+  }
+  .class-code-display .code {
+    font-family: "Sora", sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-dark);
+    font-variant-numeric: tabular-nums;
+  }
+  .class-code-display p { margin: 8px 0 0; font-size: 13px; color: var(--text-dim); }
+
+  .file-drop {
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .file-drop:hover { border-color: var(--accent); color: var(--accent); }
+  .thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .thumbs img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+
+  .submission {
+    border-top: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  .submission:first-child { border-top: none; }
+  .submission-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .submission-head strong { font-size: 15px; }
+  .submission-head time { font-size: 12px; color: var(--text-dim); display: block; margin-top: 2px; }
+  .submission-photos { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .submission-photos img { width: 88px; height: 88px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+  .submission-text { font-size: 14px; margin: 4px 0; }
+  .submission-text b { color: var(--text-dim); font-weight: 600; }
+
+  .empty { text-align: center; padding: 30px 10px; color: var(--text-dim); font-size: 14px; }
+  .error-banner {
+    background: var(--red-tint); color: var(--red); border-radius: 10px;
+    padding: 10px 14px; font-size: 13.5px; margin-bottom: 14px; font-weight: 500;
+  }
+  .success-banner {
+    background: var(--green-tint); color: var(--green); border-radius: 10px;
+    padding: 10px 14px; font-size: 13.5px; margin-bottom: 14px; font-weight: 500;
+  }
+  .spinner {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.4); border-top-color: white;
+    animation: spin 0.7s linear infinite; flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .back-link {
+    background: none; border: none; color: var(--text-dim); font: inherit; font-size: 13.5px;
+    cursor: pointer; padding: 0; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 5px;
+  }
+  .back-link:hover { color: var(--accent); }
+  .summary-box {
+    background: var(--surface-2); border-radius: 12px; padding: 14px 16px;
+    font-size: 14px; white-space: pre-wrap; line-height: 1.55; margin-top: 10px;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  .hint { font-size: 12.5px; color: var(--text-dim); margin-top: 6px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------------------------------------------------------------------
+  // Konfiguration
+  // ---------------------------------------------------------------------
+  var API_BASE = "https://pyuywbavgoingptxdsfj.supabase.co/functions/v1/api";
+
+  // ---------------------------------------------------------------------
+  // Kleines Storage-Wrapper (privates Browsing / gesperrter Speicher darf
+  // die Seite nicht zum Absturz bringen)
+  // ---------------------------------------------------------------------
+  var storage = {
+    get: function (key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    },
+    set: function (key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    },
+    remove: function (key) {
+      try { localStorage.removeItem(key); } catch (e) {}
+    }
+  };
+
+  // ---------------------------------------------------------------------
+  // API-Helper
+  // ---------------------------------------------------------------------
+  function api(path, opts) {
+    opts = opts || {};
+    var headers = opts.headers || {};
+    var body = opts.body;
+    if (body && !(body instanceof FormData)) {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify(body);
+    }
+    return fetch(API_BASE + path, {
+      method: opts.method || "GET",
+      headers: headers,
+      body: body
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        if (!res.ok) {
+          throw new Error(data.error || ("Fehler " + res.status));
+        }
+        return data;
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // Zustand
+  // ---------------------------------------------------------------------
+  var state = {
+    screen: "landing",
+    error: null,
+    loading: false,
+    student: {
+      id: storage.get("hw_student_id") || null,
+      name: storage.get("hw_student_name") || "",
+      classId: storage.get("hw_class_id") || null,
+      classCode: storage.get("hw_class_code") || null,
+      className: storage.get("hw_class_name") || null
+    },
+    teacher: {
+      id: storage.get("hw_teacher_id") || null,
+      name: storage.get("hw_teacher_name") || ""
+    },
+    homeworkList: [],
+    activeHomework: null,
+    classesList: [],
+    activeClass: null,
+    submissions: [],
+    selectedFiles: [],
+    exporting: false
+  };
+
+  function setScreen(screen, extra) {
+    state.screen = screen;
+    state.error = null;
+    if (extra) { for (var k in extra) state[k] = extra[k]; }
+    render();
+  }
+
+  function setError(msg) {
+    state.error = msg;
+    state.loading = false;
+    render();
+  }
+
+  // ---------------------------------------------------------------------
+  // Hilfsfunktionen
+  // ---------------------------------------------------------------------
+  function el(html) {
+    var d = document.createElement("div");
+    d.innerHTML = html.trim();
+    return d.firstElementChild;
+  }
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+  }
+  function fmtDateTime(iso) {
+    var d = new Date(iso);
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" }) + ", " +
+           d.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+  }
+  function escapeHtml(s) {
+    return (s || "").replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // Layout
+  // ---------------------------------------------------------------------
+  function topbar() {
+    var meta = "";
+    if (state.screen.indexOf("student") === 0 && state.student.id) {
+      meta = '<div class="topbar-meta">' + escapeHtml(state.student.name) + " &middot; " +
+             escapeHtml(state.student.classCode) +
+             '<br><button data-action="leave-student">Klasse wechseln</button></div>';
+    } else if (state.screen.indexOf("teacher") === 0 && state.teacher.id) {
+      meta = '<div class="topbar-meta">' + escapeHtml(state.teacher.name) +
+             '<br><button data-action="leave-teacher">Abmelden</button></div>';
+    }
+    return '<div class="topbar">' +
+      '<div class="brand" data-action="go-landing" style="cursor:pointer"><span class="dot"></span>Hausaufgaben</div>' +
+      meta +
+      '</div>';
+  }
+
+  function errorBanner() {
+    return state.error ? '<div class="error-banner">' + escapeHtml(state.error) + "</div>" : "";
+  }
+
+  // ---------------------------------------------------------------------
+  // Screen: Landing
+  // ---------------------------------------------------------------------
+  function screenLanding() {
+    return topbar() +
+      '<h1>Hausaufgaben</h1>' +
+      '<p class="subtitle">Teil des LE-Systems &mdash; Hausaufgaben online einreichen und auswerten.</p>' +
+      '<div class="stack">' +
+        '<button class="card role-card" data-action="go-student">' +
+          '<span class="icon">&#128218;</span>' +
+          '<span><h3>Ich bin Schüler / Schülerin</h3><p>Hausaufgabe hochladen mit einem Klassen-Code</p></span>' +
+        '</button>' +
+        '<button class="card role-card" data-action="go-teacher">' +
+          '<span class="icon orange">&#127891;</span>' +
+          '<span><h3>Ich bin Lehrkraft</h3><p>Klasse verwalten, Einreichungen ansehen</p></span>' +
+        '</button>' +
+      '</div>';
+  }
+
+  // ---------------------------------------------------------------------
+  // Schüler: Klasse beitreten
+  // ---------------------------------------------------------------------
+  function screenStudentJoin() {
+    return topbar() +
+      '<button class="back-link" data-action="go-landing">&larr; Zurück</button>' +
+      '<h1>Klasse beitreten</h1>' +
+      '<p class="subtitle">Frag deine Lehrkraft nach dem 6-stelligen Klassen-Code.</p>' +
+      errorBanner() +
+      '<div class="card">' +
+        '<div class="field">' +
+          '<label for="f-code">Klassen-Code</label>' +
+          '<input type="text" id="f-code" class="code-input" maxlength="6" placeholder="ABCD12" autocomplete="off">' +
+        '</div>' +
+        '<div class="field">' +
+          '<label for="f-name">Dein Name</label>' +
+          '<input type="text" id="f-name" placeholder="Vor- und Nachname" autocomplete="off">' +
+        '</div>' +
+        '<button class="btn btn-primary" data-action="student-join" ' + (state.loading ? "disabled" : "") + '>' +
+          (state.loading ? '<span class="spinner"></span> Trete bei…' : "Beitreten") +
+        '</button>' +
+      '</div>';
+  }
+
+  function doStudentJoin() {
+    var code = document.getElementById("f-code").value.trim().toUpperCase();
+    var name = document.getElementById("f-name").value.trim();
+    if (code.length < 4) return setError("Bitte den vollständigen Klassen-Code eingeben.");
+    if (!name) return setError("Bitte deinen Namen eingeben.");
+    state.loading = true; state.error = null; render();
+    api("/classes/" + encodeURIComponent(code)).then(function (res) {
+      return api("/classes/" + encodeURIComponent(code) + "/join", {
+        method: "POST",
+        body: { student_name: name, student_id: state.student.id }
+      }).then(function (join) {
+        state.student.id = join.student_id;
+        state.student.name = name;
+        state.student.classId = join.class_id;
+        state.student.classCode = code;
+        state.student.className = res.class.name;
+        storage.set("hw_student_id", join.student_id);
+        storage.set("hw_student_name", name);
+        storage.set("hw_class_id", join.class_id);
+        storage.set("hw_class_code", code);
+        storage.set("hw_class_name", res.class.name);
+        state.loading = false;
+        loadStudentHomework();
+      });
+    }).catch(function (e) {
+      setError(e.message === "Klasse nicht gefunden" ? "Diesen Klassen-Code gibt es nicht. Bitte prüfen." : e.message);
+    });
+  }
+
+  function loadStudentHomework() {
+    state.loading = true; render();
+    api("/classes/" + state.student.classId + "/homework").then(function (res) {
+      state.homeworkList = res.homework || [];
+      state.loading = false;
+      setScreen("student-homework");
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  // ---------------------------------------------------------------------
+  // Schüler: Hausaufgaben-Liste
+  // ---------------------------------------------------------------------
+  function screenStudentHomework() {
+    var items = state.homeworkList.map(function (h) {
+      return '<div class="hw-item">' +
+        '<div><p class="hw-title">' + escapeHtml(h.title) + '</p>' +
+        '<p class="hw-meta">' + (h.due_date ? "Fällig bis " + fmtDate(h.due_date) : "Kein Termin") + '</p></div>' +
+        '<button class="btn btn-primary" style="width:auto" data-action="student-open-hw" data-id="' + h.id + '">Abgeben</button>' +
+      '</div>';
+    }).join("");
+    return topbar() +
+      '<h1>' + escapeHtml(state.student.className || "Deine Klasse") + '</h1>' +
+      '<p class="subtitle">Klassen-Code ' + escapeHtml(state.student.classCode) + '</p>' +
+      errorBanner() +
+      '<div class="card">' +
+        (items || '<div class="empty">Noch keine Hausaufgaben eingetragen.<br>Schau später nochmal vorbei.</div>') +
+      '</div>';
+  }
+
+  // ---------------------------------------------------------------------
+  // Schüler: Hausaufgabe abgeben
+  // ---------------------------------------------------------------------
+  function screenStudentSubmit() {
+    var hw = state.activeHomework;
+    var thumbs = state.selectedFiles.map(function (f) {
+      return '<img src="' + f.previewUrl + '" alt="">';
+    }).join("");
+    return topbar() +
+      '<button class="back-link" data-action="student-back-list">&larr; Zurück zur Liste</button>' +
+      '<h1>' + escapeHtml(hw.title) + '</h1>' +
+      '<p class="subtitle">' + (hw.due_date ? "Fällig bis " + fmtDate(hw.due_date) : "") +
+        (hw.description ? "<br>" + escapeHtml(hw.description) : "") + '</p>' +
+      errorBanner() +
+      '<div class="card">' +
+        '<div class="field">' +
+          '<label>Foto(s) deiner Lösung</label>' +
+          '<div class="file-drop" data-action="pick-files">Tippen, um Fotos auszuwählen</div>' +
+          '<input type="file" id="f-photos" accept="image/*" multiple capture="environment" style="display:none">' +
+          (thumbs ? '<div class="thumbs">' + thumbs + '</div>' : '') +
+        '</div>' +
+        '<div class="field">' +
+          '<label for="f-problem">Womit hattest du Schwierigkeiten? (optional)</label>' +
+          '<input type="text" id="f-problem" placeholder="z. B. Aufgabe 3, Bruchrechnung">' +
+        '</div>' +
+        '<div class="field">' +
+          '<label for="f-comment">Kommentar (optional)</label>' +
+          '<textarea id="f-comment" placeholder="Möchtest du der Lehrkraft noch etwas sagen?"></textarea>' +
+        '</div>' +
+        '<button class="btn btn-primary" data-action="student-submit" ' + (state.loading ? "disabled" : "") + '>' +
+          (state.loading ? '<span class="spinner"></span> Wird gesendet…' : "Hausaufgabe abgeben") +
+        '</button>' +
+      '</div>';
+  }
+
+  function handleFilePick(files) {
+    state.selectedFiles = Array.prototype.slice.call(files).map(function (f) {
+      return { file: f, previewUrl: URL.createObjectURL(f) };
+    });
+    render();
+  }
+
+  function doStudentSubmit() {
+    if (!state.selectedFiles.length) return setError("Bitte mindestens ein Foto auswählen.");
+    var fd = new FormData();
+    fd.append("homework_id", state.activeHomework.id);
+    fd.append("student_id", state.student.id);
+    fd.append("class_id", state.student.classId);
+    fd.append("comment", document.getElementById("f-comment").value.trim());
+    fd.append("problem_area", document.getElementById("f-problem").value.trim());
+    state.selectedFiles.forEach(function (f) { fd.append("photos", f.file, f.file.name); });
+
+    state.loading = true; state.error = null; render();
+    api("/submissions", { method: "POST", body: fd }).then(function () {
+      state.loading = false;
+      state.selectedFiles = [];
+      setScreen("student-success");
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  function screenStudentSuccess() {
+    return topbar() +
+      '<h1>Abgeschickt! ✅</h1>' +
+      '<p class="subtitle">Deine Hausaufgabe ist bei deiner Lehrkraft angekommen.</p>' +
+      '<button class="btn btn-secondary" data-action="student-back-list">Zurück zur Übersicht</button>';
+  }
+
+  // ---------------------------------------------------------------------
+  // Lehrkraft: Start / Anmeldung
+  // ---------------------------------------------------------------------
+  function screenTeacherHome() {
+    return topbar() +
+      '<button class="back-link" data-action="go-landing">&larr; Zurück</button>' +
+      '<h1>Lehrer-Bereich</h1>' +
+      '<p class="subtitle">Neue Klasse anlegen oder mit deinem bestehenden Zugang weitermachen.</p>' +
+      errorBanner() +
+      '<div class="card">' +
+        '<h2>Neue Klasse anlegen</h2>' +
+        '<p class="hint" style="margin:2px 0 14px">Erstellt automatisch auch deinen Lehrer-Zugang, falls du noch keinen hast.</p>' +
+        '<div class="field"><label for="f-teacher-name">Dein Name</label>' +
+          '<input type="text" id="f-teacher-name" placeholder="z. B. Frau Weber" value="' + escapeHtml(state.teacher.name) + '"></div>' +
+        '<div class="field"><label for="f-class-name">Klassenname</label>' +
+          '<input type="text" id="f-class-name" placeholder="z. B. 9b Biologie"></div>' +
+        '<button class="btn btn-primary" data-action="teacher-create-class" ' + (state.loading ? "disabled" : "") + '>' +
+          (state.loading ? '<span class="spinner"></span> Wird angelegt…' : "Klasse anlegen") +
+        '</button>' +
+      '</div>' +
+      '<div class="card">' +
+        '<h2>Zu bestehendem Zugang zurück</h2>' +
+        '<p class="hint" style="margin:2px 0 14px">Deine Lehrer-ID wurde dir beim ersten Anlegen angezeigt.</p>' +
+        '<div class="field"><input type="text" id="f-teacher-id" placeholder="Lehrer-ID einfügen"></div>' +
+        '<button class="btn btn-secondary" data-action="teacher-restore">Laden</button>' +
+      '</div>';
+  }
+
+  function doTeacherCreateClass() {
+    var name = document.getElementById("f-teacher-name").value.trim();
+    var className = document.getElementById("f-class-name").value.trim();
+    if (!state.teacher.id && !name) return setError("Bitte deinen Namen eingeben.");
+    if (!className) return setError("Bitte einen Klassennamen eingeben.");
+    state.loading = true; state.error = null; render();
+    api("/classes", {
+      method: "POST",
+      body: { teacher_id: state.teacher.id, teacher_name: name, class_name: className }
+    }).then(function (res) {
+      state.teacher.id = res.teacher_id;
+      state.teacher.name = name || state.teacher.name;
+      storage.set("hw_teacher_id", res.teacher_id);
+      storage.set("hw_teacher_name", state.teacher.name);
+      state.loading = false;
+      loadTeacherClasses(true);
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  function doTeacherRestore() {
+    var id = document.getElementById("f-teacher-id").value.trim();
+    if (!id) return setError("Bitte eine Lehrer-ID eingeben.");
+    state.teacher.id = id;
+    storage.set("hw_teacher_id", id);
+    loadTeacherClasses(true);
+  }
+
+  function loadTeacherClasses(showNewCode) {
+    state.loading = true; render();
+    api("/teachers/" + state.teacher.id + "/classes").then(function (res) {
+      state.classesList = res.classes || [];
+      state.loading = false;
+      if (state.teacher.name) storage.set("hw_teacher_name", state.teacher.name);
+      setScreen("teacher-classes", { newlyCreatedCode: showNewCode ? (res.classes[0] && res.classes[0].class_code) : null });
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  // ---------------------------------------------------------------------
+  // Lehrkraft: Klassenliste
+  // ---------------------------------------------------------------------
+  function screenTeacherClasses() {
+    var items = state.classesList.map(function (c) {
+      return '<div class="hw-item">' +
+        '<div><p class="hw-title">' + escapeHtml(c.name) + '</p>' +
+        '<p class="hw-meta">Code ' + escapeHtml(c.class_code) + '</p></div>' +
+        '<button class="btn btn-primary" style="width:auto" data-action="teacher-open-class" data-id="' + c.id + '" data-name="' + escapeHtml(c.name) + '" data-code="' + escapeHtml(c.class_code) + '">Öffnen</button>' +
+      '</div>';
+    }).join("");
+    var freshCode = state.newlyCreatedCode ? (
+      '<div class="class-code-display"><div class="code">' + escapeHtml(state.newlyCreatedCode) + '</div>' +
+      '<p>Diesen Code gibst du deiner Klasse zum Beitreten</p></div>'
+    ) : "";
+    return topbar() +
+      '<h1>Deine Klassen</h1>' +
+      '<p class="subtitle">Lehrer-ID (zum Wiederfinden aufbewahren): <code>' + escapeHtml(state.teacher.id) + '</code></p>' +
+      errorBanner() +
+      freshCode +
+      '<div class="card">' + (items || '<div class="empty">Noch keine Klasse angelegt.</div>') + '</div>' +
+      '<button class="btn btn-ghost" data-action="teacher-new-class">+ Weitere Klasse anlegen</button>';
+  }
+
+  // ---------------------------------------------------------------------
+  // Lehrkraft: Klassen-Detail (Hausaufgaben)
+  // ---------------------------------------------------------------------
+  function screenTeacherClass() {
+    var cls = state.activeClass;
+    var items = state.homeworkList.map(function (h) {
+      return '<div class="hw-item">' +
+        '<div><p class="hw-title">' + escapeHtml(h.title) + '</p>' +
+        '<p class="hw-meta">' + (h.due_date ? "Fällig bis " + fmtDate(h.due_date) : "Kein Termin") + '</p></div>' +
+        '<button class="btn btn-primary" style="width:auto" data-action="teacher-open-hw" data-id="' + h.id + '" data-title="' + escapeHtml(h.title) + '">Einreichungen</button>' +
+      '</div>';
+    }).join("");
+    return topbar() +
+      '<button class="back-link" data-action="teacher-back-classes">&larr; Alle Klassen</button>' +
+      '<h1>' + escapeHtml(cls.name) + '</h1>' +
+      '<p class="subtitle">Klassen-Code ' + escapeHtml(cls.code) + '</p>' +
+      errorBanner() +
+      '<div class="card">' +
+        '<h2>Neue Hausaufgabe</h2>' +
+        '<div class="field"><label for="f-hw-title">Titel</label><input type="text" id="f-hw-title" placeholder="z. B. Arbeitsblatt Bruchrechnung"></div>' +
+        '<div class="row">' +
+          '<div class="field" style="flex:1"><label for="f-hw-due">Fällig bis</label><input type="date" id="f-hw-due"></div>' +
+        '</div>' +
+        '<div class="field"><label for="f-hw-desc">Beschreibung (optional)</label><textarea id="f-hw-desc" placeholder="Kurze Anweisung für die Klasse"></textarea></div>' +
+        '<button class="btn btn-primary" data-action="teacher-add-hw" ' + (state.loading ? "disabled" : "") + '>' +
+          (state.loading ? '<span class="spinner"></span> Wird angelegt…' : "Hausaufgabe anlegen") +
+        '</button>' +
+      '</div>' +
+      '<h2 style="margin-top:22px">Hausaufgaben</h2>' +
+      '<div class="card">' + (items || '<div class="empty">Noch keine Hausaufgabe angelegt.</div>') + '</div>';
+  }
+
+  function doTeacherAddHomework() {
+    var title = document.getElementById("f-hw-title").value.trim();
+    var due = document.getElementById("f-hw-due").value;
+    var desc = document.getElementById("f-hw-desc").value.trim();
+    if (!title) return setError("Bitte einen Titel eingeben.");
+    state.loading = true; state.error = null; render();
+    api("/homework", {
+      method: "POST",
+      body: { class_id: state.activeClass.id, title: title, due_date: due || null, description: desc || null }
+    }).then(function () {
+      state.loading = false;
+      loadTeacherClassHomework();
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  function loadTeacherClassHomework() {
+    api("/classes/" + state.activeClass.id + "/homework").then(function (res) {
+      state.homeworkList = res.homework || [];
+      render();
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  // ---------------------------------------------------------------------
+  // Lehrkraft: Einreichungen zu einer Hausaufgabe
+  // ---------------------------------------------------------------------
+  function screenTeacherSubmissions() {
+    var hw = state.activeHomework;
+    var items = state.submissions.map(function (s) {
+      var photos = (s.photo_urls || []).map(function (u) {
+        return '<img src="' + u + '" alt="Foto der Einreichung">';
+      }).join("");
+      return '<div class="submission">' +
+        '<div class="submission-head">' +
+          '<div><strong>' + escapeHtml(s.student_name || "Unbekannt") + '</strong><time>' + fmtDateTime(s.created_at) + '</time></div>' +
+          '<button class="btn-danger" data-action="teacher-delete-submission" data-id="' + s.id + '">Löschen</button>' +
+        '</div>' +
+        (photos ? '<div class="submission-photos">' + photos + '</div>' : '') +
+        (s.problem_area ? '<p class="submission-text"><b>Problem:</b> ' + escapeHtml(s.problem_area) + '</p>' : '') +
+        (s.comment ? '<p class="submission-text"><b>Kommentar:</b> ' + escapeHtml(s.comment) + '</p>' : '') +
+      '</div>';
+    }).join("");
+    return topbar() +
+      '<button class="back-link" data-action="teacher-back-class">&larr; ' + escapeHtml(state.activeClass.name) + '</button>' +
+      '<h1>' + escapeHtml(hw.title) + '</h1>' +
+      '<p class="subtitle">' + state.submissions.length + ' Einreichung(en)</p>' +
+      errorBanner() +
+      '<div class="card">' +
+        '<button class="btn btn-secondary" data-action="teacher-export" ' + (state.exporting ? "disabled" : "") + '>' +
+          (state.exporting ? '<span class="spinner" style="border-top-color:var(--accent)"></span> Wird erstellt…' : "📄 Als Text + Fotos herunterladen (für Obsidian)") +
+        '</button>' +
+        '<p class="hint" style="margin:8px 0 0">Lädt ein ZIP mit einem Textdokument (Markdown) und allen Fotos herunter. Einfach entpacken und in Obsidian ziehen -- dann kannst du das Dokument mit Claude durchgehen.</p>' +
+      '</div>' +
+      '<div class="card">' + (items || '<div class="empty">Noch keine Einreichungen.</div>') + '</div>';
+  }
+
+  function loadSubmissions() {
+    state.loading = true; render();
+    api("/homework/" + state.activeHomework.id + "/submissions").then(function (res) {
+      state.submissions = res.submissions || [];
+      state.loading = false;
+      render();
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  function mdEscape(s) {
+    return String(s == null ? "" : s).replace(/\r\n/g, "\n");
+  }
+
+  function slugify(s) {
+    return String(s || "foto")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "")
+      .slice(0, 40) || "foto";
+  }
+
+  function doExportMarkdown() {
+    if (typeof JSZip === "undefined") return setError("Export-Bibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen.");
+    var hw = state.activeHomework;
+    var cls = state.activeClass;
+    state.exporting = true; state.error = null; render();
+
+    var zip = new JSZip();
+    var lines = [];
+    lines.push("# " + mdEscape(hw.title));
+    lines.push("");
+    lines.push("Klasse: " + mdEscape(cls.name) + "  ");
+    lines.push("Exportiert am: " + mdEscape(fmtDateTime(new Date().toISOString())));
+    lines.push("");
+    lines.push("---");
+    lines.push("");
+
+    var photoFetches = [];
+    state.submissions.forEach(function (s, i) {
+      lines.push("## " + mdEscape(s.student_name || "Unbekannt") + " -- " + mdEscape(fmtDateTime(s.created_at)));
+      lines.push("");
+      if (s.problem_area) { lines.push("**Problem:** " + mdEscape(s.problem_area)); lines.push(""); }
+      if (s.comment) { lines.push("**Kommentar:** " + mdEscape(s.comment)); lines.push(""); }
+      var urls = s.photo_urls || [];
+      urls.forEach(function (u, j) {
+        var fname = "fotos/" + (i + 1) + "-" + slugify(s.student_name) + "-" + (j + 1) + ".jpg";
+        lines.push("![Foto " + (j + 1) + "](" + fname + ")");
+        photoFetches.push(
+          fetch(u).then(function (r) { return r.blob(); }).then(function (blob) {
+            zip.file(fname, blob);
+          }).catch(function () { /* einzelnes Foto ignorieren, Rest laeuft weiter */ })
+        );
+      });
+      lines.push("");
+      lines.push("---");
+      lines.push("");
+    });
+
+    zip.file(slugify(hw.title) + ".md", lines.join("\n"));
+
+    Promise.all(photoFetches).then(function () {
+      return zip.generateAsync({ type: "blob" });
+    }).then(function (blob) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = slugify(hw.title) + ".zip";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      state.exporting = false;
+      render();
+    }).catch(function (e) {
+      state.exporting = false;
+      setError("Export fehlgeschlagen: " + e.message);
+    });
+  }
+
+  function doDeleteSubmission(id) {
+    api("/submissions/" + id, { method: "DELETE" }).then(function () {
+      state.submissions = state.submissions.filter(function (s) { return s.id !== id; });
+      render();
+    }).catch(function (e) { setError(e.message); });
+  }
+
+  // ---------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------
+  function render() {
+    var html;
+    switch (state.screen) {
+      case "student-join": html = screenStudentJoin(); break;
+      case "student-homework": html = screenStudentHomework(); break;
+      case "student-submit": html = screenStudentSubmit(); break;
+      case "student-success": html = screenStudentSuccess(); break;
+      case "teacher-home": html = screenTeacherHome(); break;
+      case "teacher-classes": html = screenTeacherClasses(); break;
+      case "teacher-class": html = screenTeacherClass(); break;
+      case "teacher-submissions": html = screenTeacherSubmissions(); break;
+      default: html = screenLanding();
+    }
+    document.getElementById("app").innerHTML = html;
+    var fileInput = document.getElementById("f-photos");
+    if (fileInput) {
+      fileInput.addEventListener("change", function (e) { handleFilePick(e.target.files); });
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Event-Delegation
+  // ---------------------------------------------------------------------
+  document.getElementById("app").addEventListener("click", function (e) {
+    var t = e.target.closest("[data-action]");
+    if (!t) return;
+    var action = t.getAttribute("data-action");
+    switch (action) {
+      case "go-landing": setScreen("landing"); break;
+      case "go-student":
+        if (state.student.id && state.student.classId) loadStudentHomework();
+        else setScreen("student-join");
+        break;
+      case "go-teacher":
+        if (state.teacher.id) loadTeacherClasses(false);
+        else setScreen("teacher-home");
+        break;
+      case "leave-student":
+        storage.remove("hw_student_id"); storage.remove("hw_student_name");
+        storage.remove("hw_class_id"); storage.remove("hw_class_code"); storage.remove("hw_class_name");
+        state.student = { id: null, name: "", classId: null, classCode: null, className: null };
+        setScreen("landing");
+        break;
+      case "leave-teacher":
+        storage.remove("hw_teacher_id"); storage.remove("hw_teacher_name");
+        state.teacher = { id: null, name: "" };
+        setScreen("landing");
+        break;
+      case "student-join": doStudentJoin(); break;
+      case "student-back-list": state.selectedFiles = []; loadStudentHomework(); break;
+      case "student-open-hw":
+        var hwId = t.getAttribute("data-id");
+        state.activeHomework = state.homeworkList.filter(function (h) { return h.id === hwId; })[0];
+        state.selectedFiles = [];
+        setScreen("student-submit");
+        break;
+      case "student-submit": doStudentSubmit(); break;
+      case "pick-files": document.getElementById("f-photos").click(); break;
+      case "teacher-create-class": doTeacherCreateClass(); break;
+      case "teacher-restore": doTeacherRestore(); break;
+      case "teacher-new-class": setScreen("teacher-home"); break;
+      case "teacher-back-classes": loadTeacherClasses(false); break;
+      case "teacher-open-class":
+        state.activeClass = { id: t.getAttribute("data-id"), name: t.getAttribute("data-name"), code: t.getAttribute("data-code") };
+        setScreen("teacher-class");
+        loadTeacherClassHomework();
+        break;
+      case "teacher-add-hw": doTeacherAddHomework(); break;
+      case "teacher-back-class": setScreen("teacher-class"); loadTeacherClassHomework(); break;
+      case "teacher-open-hw":
+        state.activeHomework = { id: t.getAttribute("data-id"), title: t.getAttribute("data-title") };
+        setScreen("teacher-submissions");
+        loadSubmissions();
+        break;
+      case "teacher-export": doExportMarkdown(); break;
+      case "teacher-delete-submission": doDeleteSubmission(t.getAttribute("data-id")); break;
+    }
+  });
+
+  // ---------------------------------------------------------------------
+  // Start
+  // ---------------------------------------------------------------------
+  render();
+})();
+</script>
+</body>
+</html>
