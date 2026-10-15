@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datenschutz – LE-System</title>
+<style>
+  :root { --text: #1d1f24; --grau: #5d6370; --linie: #e3e5ea; --bg: #ffffff; --akzent: #3e74f0; }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #eef0f4; --grau: #a3a9b5; --linie: #2c3039; --bg: #14161c; --akzent: #7aa2ff; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; padding-top: 16px; border-top: 1px solid var(--linie); }
+  .stand { color: var(--grau); margin: 0 0 24px; }
+  a { color: var(--akzent); }
+  ul { padding-left: 22px; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Datenschutzerklärung LE-System</h1>
+<p class="stand">Stand: 15. Oktober 2026 · Testphase</p>
+
+<h2>1. Wer ist verantwortlich?</h2>
+<p>Theo Kuschel<br>Malvenbogen 26<br>04416 Markkleeberg<br>E-Mail: <a href="mailto:Theo.Kuschel.Save@gmx.de">Theo.Kuschel.Save@gmx.de</a></p>
+<p>LE-System ist ein privates Projekt in der Testphase. Bei Fragen zum Datenschutz schreib an die E-Mail oben oder nutze in der App „Feedback senden“.</p>
+
+<h2>2. Welche Daten verarbeitet die App?</h2>
+<p><strong>Auf deinem Gerät</strong> (verlassen das Gerät nicht, außer du schickst Inhalte an die KI, siehe Punkt 3): Fächer, Kalender, Stundenplan, Prüfungen, Karteikarten, Lernstand, Notizen und das Material, das du in der App sammelst. Ebenfalls nur auf dem Gerät: dein Geburtsjahr und deine Einwilligung zur KI-Nutzung.</p>
+<p><strong>Auf unserem Server</strong> (Supabase, Rechenzentrum in Irland, EU):</p>
+<ul>
+  <li>Konto: Name, E-Mail-Adresse, Passwort (nur verschlüsselt gespeichert), Rolle (Schüler/Schülerin)</li>
+  <li>KI-Nutzung: Zeitpunkt, Fach, Zweck, Umfang und Kosten jeder KI-Anfrage, damit wir die Kosten pro Nutzer begrenzen können</li>
+  <li>KI-Antworten: werden kurz zwischengespeichert, damit eine unterbrochene Antwort nicht verloren geht, und nach spätestens 24 Stunden gelöscht</li>
+  <li>Feedback: was du über „Feedback senden“ schickst (Text, optional ein Bildschirmfoto), dazu App-Version und Gerätetyp</li>
+</ul>
+
+<h2>3. KI-Auswertung (Anthropic Claude)</h2>
+<p>Damit der Coach dir helfen kann, gehen deine Fotos, Dateien und Chat-Nachrichten über unseren Server an die KI „Claude“ der Anthropic PBC (USA). Das passiert nur, wenn du in der App zugestimmt hast. Die Einwilligung kannst du jederzeit unter Einstellungen → Datenschutz widerrufen; danach ist die KI gesperrt, der Rest der App funktioniert weiter.</p>
+<p>Anthropic verarbeitet die Inhalte in unserem Auftrag, um die Antwort zu erzeugen. Für die Übermittlung in die USA gelten die Standardvertragsklauseln der EU-Kommission bzw. das EU-US Data Privacy Framework. Nach Angaben von Anthropic werden Inhalte aus der API nicht zum Training der KI-Modelle verwendet und nur befristet gespeichert.</p>
+<p>Bitte lade keine Fotos hoch, auf denen Namen, Gesichter oder andere persönliche Daten anderer Personen zu sehen sind.</p>
+
+<h2>4. Alter</h2>
+<p>In der aktuellen Testphase richtet sich LE-System an Nutzer ab 16 Jahren. Wer jünger ist, darf die KI nur mit Zustimmung der Eltern nutzen; ohne diese Zustimmung bleibt die KI in der App gesperrt.</p>
+
+<h2>5. Rechtsgrundlagen</h2>
+<ul>
+  <li>Konto und Funktionen der App: Erfüllung des Nutzungsvertrags (Art. 6 Abs. 1 lit. b DSGVO)</li>
+  <li>KI-Auswertung deiner Inhalte: deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, bei unter 16-Jährigen mit Zustimmung der Eltern, Art. 8 DSGVO)</li>
+  <li>Kostenbegrenzung, Missbrauchsschutz und Fehlersuche: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO)</li>
+</ul>
+
+<h2>6. Wie lange werden Daten gespeichert?</h2>
+<ul>
+  <li>Kontodaten und KI-Nutzungsprotokoll: bis du dein Konto löschst</li>
+  <li>KI-Antworten im Zwischenspeicher: höchstens 24 Stunden</li>
+  <li>Feedback: bis zum Ende der Testphase</li>
+</ul>
+
+<h2>7. Weitere Dienste</h2>
+<ul>
+  <li><strong>Supabase</strong> (Supabase Inc., Server in Irland): Datenbank und Anmeldung, im Auftrag</li>
+  <li><strong>Apple TestFlight</strong>: Für die Testversion verarbeitet Apple Daten nach den eigenen Bedingungen, z. B. Absturzberichte, wenn du sie freigibst</li>
+</ul>
+
+<h2>8. Deine Rechte</h2>
+<p>Du kannst jederzeit Auskunft über deine Daten verlangen, sie berichtigen oder löschen lassen, die Verarbeitung einschränken, deine Daten herausverlangen und einer Verarbeitung widersprechen. Eine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen. Schreib dafür an die E-Mail oben.</p>
+<p>Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel bei der Sächsischen Datenschutz- und Transparenzbeauftragten.</p>
+
+<h2>9. Konto löschen</h2>
+<p>In der App unter Einstellungen → „Konto löschen“. Dabei werden dein Konto und alle zugehörigen Daten auf dem Server gelöscht (Profil, KI-Protokoll, Feedback). Daten auf deinem Gerät löschst du, indem du die App entfernst.</p>
+</main>
+</body>
+</html>
